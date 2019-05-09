@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bin.kong.proxy.dao.mapper.repeater.RequestFolderJoinDetailMapper">
+    <resultMap id="BaseResultMap" type="com.bin.kong.proxy.model.repeater.entity.RequestDetailJoinFolder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="body_type" property="body_type" jdbcType="VARCHAR"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="request_json" property="request_json" jdbcType="VARCHAR"/>
+        <result column="request_form" property="request_form" jdbcType="VARCHAR"/>
+        <result column="folder_id" property="folder_id" jdbcType="INTEGER"/>
+        <result column="folder_name" property="folder_name" jdbcType="VARCHAR"/>
+        <result column="headers" property="headers" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+     request_detail.id id, request_detail.name name, request_detail.description description, request_detail.url url, request_detail.method method, request_detail.body_type body_type,
+     request_detail.user_id user_id, request_detail.create_time create_time, request_detail.update_time update_time, request_detail.request_json request_json, request_detail.request_form request_form,
+     request_folder.id folder_id,request_folder.name folder_name,request_detail.headers headers
+  </sql>
+    <select id="searchListWithFolder" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.repeater.search.HistorySearch">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        repeater_request_folder request_folder
+        left join
+        repeater_request_detail request_detail
+        on request_detail.folder_id=request_folder.id and request_detail.user_id =request_folder.user_id
+        where 1=1
+        <if test="kw!=null">
+            and (request_detail.name like CONCAT('%',#{kw},'%') or request_folder.name like CONCAT('%',#{kw},'%'))
+        </if>
+        order by request_folder.id desc ,request_detail.id desc
+    </select>
+</mapper>

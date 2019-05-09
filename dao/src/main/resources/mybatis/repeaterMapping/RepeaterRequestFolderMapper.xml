@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bin.kong.proxy.dao.mapper.repeater.RepeaterRequestFolderMapper">
+    <resultMap id="BaseResultMap" type="com.bin.kong.proxy.model.repeater.entity.RepeaterRequestFolder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, create_time, user_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from repeater_request_folder
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from repeater_request_folder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.repeater.entity.RepeaterRequestFolder">
+        insert into repeater_request_folder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="user_id != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user_id != null">
+                #{user_id,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.bin.kong.proxy.model.repeater.entity.RepeaterRequestFolder">
+        update repeater_request_folder
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                create_time = #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="user_id != null">
+                user_id = #{user_id,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="searchList" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.repeater.search.FolderSearch">
+        select
+        <include refid="Base_Column_List"/>
+        from repeater_request_folder
+        where 1=1
+        <if test="kw!=null">
+            and name like CONCAT('%',#{kw},'%')
+        </if>
+        and user_id =#{user_id}
+        order by id desc
+        limit 100
+    </select>
+</mapper>

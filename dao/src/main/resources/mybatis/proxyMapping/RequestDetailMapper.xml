@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper">
+    <resultMap id="BaseResultMap" type="com.bin.kong.proxy.model.proxy.entity.RequestDetail">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="host" property="host" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="mime_type" property="mime_type" jdbcType="VARCHAR"/>
+        <result column="protocol" property="protocol" jdbcType="VARCHAR"/>
+        <result column="header" property="header" jdbcType="VARCHAR"/>
+        <result column="body" property="body" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="proxy_port" property="proxy_port" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, method, code, host, path, mime_type, create_time, update_time,header,protocol,body,url,proxy_port
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from proxy_request_detail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from proxy_request_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.proxy.entity.RequestDetail"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into proxy_request_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="host != null">
+                host,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+            <if test="mime_type != null">
+                mime_type,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="update_time != null">
+                update_time,
+            </if>
+            <if test="header != null">
+                header,
+            </if>
+            <if test="protocol != null">
+                protocol,
+            </if>
+            <if test="body != null">
+                body,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="proxy_port != null">
+                proxy_port,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="host != null">
+                #{host,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="mime_type != null">
+                #{mime_type,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_time != null">
+                #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="header != null">
+                #{header,jdbcType=VARCHAR},
+            </if>
+            <if test="protocol != null">
+                #{protocol,jdbcType=VARCHAR},
+            </if>
+            <if test="body != null">
+                #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="proxy_port != null">
+                #{proxy_port,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bin.kong.proxy.model.proxy.entity.RequestDetail">
+        update proxy_request_detail
+        <set>
+            <if test="method != null">
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="host != null">
+                host = #{host,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="mime_type != null">
+                mime_type = #{mime_type,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                create_time = #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="header != null">
+                header = #{header,jdbcType=VARCHAR},
+            </if>
+            <if test="protocol != null">
+                protocol = #{protocol,jdbcType=VARCHAR},
+            </if>
+            <if test="body != null">
+                body = #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="searchList" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.proxy.search.RequestSearch">
+        select
+        <include refid="Base_Column_List"/>
+        from proxy_request_detail
+        where 1=1
+        <if test="max_id != null and max_id>0">
+            and id>#{max_id}
+        </if>
+        <if test="kw!=null">
+            and (method like CONCAT('%',#{kw},'%')
+            or url like CONCAT('%',#{kw},'%')
+            or code like CONCAT('%',#{kw},'%')
+            )
+        </if>
+        limit 100
+    </select>
+    <delete id="deleteByPort" parameterType="java.lang.Integer">
+    delete from proxy_request_detail
+    where proxy_port = #{proxy_port,jdbcType=INTEGER}
+  </delete>
+</mapper>
