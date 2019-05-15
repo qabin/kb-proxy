@@ -50,7 +50,7 @@ public class RequestUtilsController {
                 result = HttpUtils.doGet(request.getUrl(), null, request.getHeader());
             } else if (request.getMethod().equals(HttpMethod.POST.name()) || request.getMethod().equals(HttpMethod.PUT.name()) || request.getMethod().equals(HttpMethod.PATCH.name())) {
                 Map<String, String> headerMap = new HashMap<>();
-                if (request.getBody_type().equals("form")) {
+                if (null != request.getBody_type() && request.getBody_type().equals("form")) {
                     if (null != request.getHeader() && request.getHeader().get("Content-Type") != null && request.getHeader().get("Content-Type").contains("x-www-form-urlencoded")) {
                         headerMap = request.getHeader();
                     } else if (null != request.getHeader()) {

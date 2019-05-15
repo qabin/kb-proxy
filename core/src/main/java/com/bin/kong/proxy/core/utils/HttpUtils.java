@@ -32,7 +32,7 @@ public class HttpUtils {
         addConfig(httpPost);
         addHeaderToRequest(headersMap, httpPost);
         try {
-            addBody(httpPost,paramsMap,headersMap,body);
+            addBody(httpPost, paramsMap, headersMap, body);
             HttpResponse response = httpClient.execute(httpPost);
             return dealHttpResponse(response);
 
@@ -90,7 +90,7 @@ public class HttpUtils {
             httpPut = new HttpPut(url);
             addConfig(httpPut);
             addHeaderToRequest(headersMap, httpPut);
-            addBody(httpPut,paramsMap,headersMap,body);
+            addBody(httpPut, paramsMap, headersMap, body);
             CloseableHttpResponse httpResponse = httpClient.execute(httpPut);
             return dealHttpResponse(httpResponse);
         } catch (Exception ex) {
@@ -139,7 +139,7 @@ public class HttpUtils {
             httpPatch = new HttpPatch(url);
             addConfig(httpPatch);
             addHeaderToRequest(headersMap, httpPatch);
-            addBody(httpPatch,paramsMap,headersMap,body);
+            addBody(httpPatch, paramsMap, headersMap, body);
             CloseableHttpResponse httpResponse = httpClient.execute(httpPatch);
             return dealHttpResponse(httpResponse);
         } catch (Exception ex) {
@@ -169,10 +169,12 @@ public class HttpUtils {
                 }
                 http.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             } else {
-                StringEntity entity = new StringEntity(body, "utf-8");
-                entity.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                entity.setContentEncoding("utf-8");
-                http.setEntity(entity);
+                if (null != body) {
+                    StringEntity entity = new StringEntity(body, "utf-8");
+                    entity.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    entity.setContentEncoding("utf-8");
+                    http.setEntity(entity);
+                }
             }
         } catch (UnsupportedEncodingException e) {
             log.error("addBody异常：" + e);
