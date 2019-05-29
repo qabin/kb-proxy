@@ -23,7 +23,8 @@
     delete from proxy_response_detail
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.proxy.entity.ResponseDetail">
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.proxy.entity.ResponseDetail"
+            useGeneratedKeys="true" keyProperty="id">
         insert into proxy_response_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

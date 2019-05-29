@@ -2,8 +2,13 @@ package com.bin.kong.proxy.server.littleproxy;
 
 import com.alibaba.fastjson.JSON;
 import com.bin.kong.proxy.core.cache.impl.LocalCacheUtils;
+import com.bin.kong.proxy.dao.mapper.mock.MockProxyHistoryMapper;
 import com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper;
+import com.bin.kong.proxy.model.mock.entity.MockProxy;
+import com.bin.kong.proxy.model.mock.entity.MockProxyHistory;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
+import com.bin.kong.proxy.server.mock.MockMatcher;
+import com.bin.kong.proxy.server.mock.MockProxyCache;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -24,6 +29,12 @@ import java.util.zip.GZIPInputStream;
 public class ClientToProxyRequestFilter {
     @Resource
     private RequestDetailMapper requestDetailMapper;
+    @Resource
+    private MockMatcher mockMatcher;
+    @Resource
+    private MockProxyHistoryMapper mockProxyHistoryMapper;
+    @Resource
+    private MockProxyCache mockProxyCache;
 
     private static Map<Object, HttpEntity> requestMap = new HashMap<>();
 
@@ -84,8 +95,24 @@ public class ClientToProxyRequestFilter {
                     requestMap.remove(originalRequest);
                 }
             }
+            if (originalRequest.method().name().equals(HttpMethod.CONNECT.name())) {
+                return null;
+            }
+            // 保存Mock 记录
+            MockProxy mockProxy = mockProxyCache.get(getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST))), port);
+            if (mockProxy != null) {
+                mockProxyHistoryMapper.insertSelective(MockProxyHistory.builder()
+                        .mock_id(mockProxy.getId())
+                        .code(mockProxy.getCode())
+                        .create_time(new Date())
+                        .headers(mockProxy.getHeaders())
+                        .response(mockProxy.getResponse())
+                        .method(mockProxy.getMethod())
+                        .url(mockProxy.getUrl())
+                        .build());
+            }
+            return mockMatcher.getResponseByUrl(getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST))), port);
 
-            return null;
         } catch (IOException e) {
             log.error("clientToProxyRequest执行异常：" + e);
             return null;

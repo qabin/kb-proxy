@@ -22,23 +22,23 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- 生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="com.bin.kong.proxy.model.repeater.entity"
+        <javaModelGenerator targetPackage="com.bin.kong.proxy.model.mock.entity"
                             targetProject="/Users/ppd-03020251/workDir/kb-proxy-backend/model/src/main/java/">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 生成映射文件的包名和位置-->
-        <sqlMapGenerator targetPackage="mybatis.repeaterMapping"
+        <sqlMapGenerator targetPackage="mybatis.mockMapping"
                          targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.bin.kong.proxy.dao.mapper.repeater" targetProject="src/main/java">
+                             targetPackage="com.bin.kong.proxy.dao.mapper.mock" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="repeater_request_detail" domainObjectName="RepeaterRequestDetail"
+        <table tableName="mock_proxy_history" domainObjectName="MockProxyHistory"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -22,6 +22,8 @@ public class LittleProxyServer {
     private ClientToProxyRequestFilter clientToProxyRequestFilter;
     @Resource
     private ServerToProxyResponseFilter serverToProxyResponseFilter;
+    @Resource
+    private ProxyToClientResponseFilter proxyToClientResponseFilter;
     private static final AttributeKey<String> CONNECTED_URL = AttributeKey.valueOf("connected_url");
 
 
@@ -51,6 +53,10 @@ public class LittleProxyServer {
                                     return serverToProxyResponseFilter.serverToProxyResponse(httpObject, originalRequest);
                                 }
 
+                                @Override
+                                public HttpObject proxyToClientResponse(HttpObject httpObject) {
+                                    return proxyToClientResponseFilter.proxyToClientResponse(httpObject, originalRequest);
+                                }
                             };
                         }
                     })

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bin.kong.proxy.dao.mapper.mock.MockProxyHistoryMapper">
+    <resultMap id="BaseResultMap" type="com.bin.kong.proxy.model.mock.entity.MockProxyHistory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="mock_id" property="mock_id" jdbcType="INTEGER"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="code" property="code" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="response" property="response" jdbcType="VARCHAR"/>
+        <result column="headers" property="headers" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, mock_id, method, create_time, code, url, response, headers
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from mock_proxy_history
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mock_proxy_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.mock.entity.MockProxyHistory"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into mock_proxy_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="mock_id != null">
+                mock_id,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="response != null">
+                response,
+            </if>
+            <if test="headers != null">
+                headers,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mock_id != null">
+                #{mock_id,jdbcType=INTEGER},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="response != null">
+                #{response,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="headers != null">
+                #{headers,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bin.kong.proxy.model.mock.entity.MockProxyHistory">
+        update mock_proxy_history
+        <set>
+            <if test="mock_id != null">
+                mock_id = #{mock_id,jdbcType=INTEGER},
+            </if>
+            <if test="method != null">
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                create_time = #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="response != null">
+                response = #{response,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="headers != null">
+                headers = #{headers,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="searchList" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.mock.search.MockProxyHistorySearch">
+        select
+        <include refid="Base_Column_List"/>
+        from mock_proxy_history
+        where 1=1
+        <if test="mock_id!=null">
+            and mock_id =#{mock_id}
+        </if>
+        order by id desc
+        <if test="page != null and size !=null">
+            limit #{startNum},#{size}
+        </if>
+    </select>
+
+    <select id="searchCount" resultType="java.lang.Integer"
+            parameterType="com.bin.kong.proxy.model.mock.search.MockProxyHistorySearch">
+        select
+        count(*)
+        from mock_proxy_history
+        where 1=1
+        <if test="mock_id!=null">
+            and mock_id =#{mock_id}
+        </if>
+    </select>
+
+</mapper>
