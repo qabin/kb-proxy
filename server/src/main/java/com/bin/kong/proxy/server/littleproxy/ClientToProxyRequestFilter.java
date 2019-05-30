@@ -11,6 +11,7 @@ import com.bin.kong.proxy.server.mock.MockMatcher;
 import com.bin.kong.proxy.server.mock.MockProxyCache;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -74,17 +75,17 @@ public class ClientToProxyRequestFilter {
 
                 if (myRequest.getContent() != null) {
                     io.netty.handler.codec.http.HttpHeaders httpHeaders = myRequest.getHttpHeaders();
-                    String ce = httpHeaders.get("Content-Encoding");
+                    String ce = httpHeaders.get(HttpHeaders.CONTENT_ENCODING);
                     if (ce != null && ce.contains("gzip")) {
                         if (myRequest.getContent() != null) {
                             ByteArrayInputStream bais = new ByteArrayInputStream(myRequest.getContent());
                             GZIPInputStream gzis = new GZIPInputStream(bais);
                             byte[] decompressedData = IOUtils.toByteArray(gzis);
-                            requestDetail.setBody(new String(decompressedData, "utf-8"));
+                            requestDetail.setBody(new String(decompressedData, CharEncoding.UTF_8));
                         }
                     } else {
                         if (myRequest.getContent() != null) {
-                            requestDetail.setBody(new String(myRequest.getContent(), "utf-8"));
+                            requestDetail.setBody(new String(myRequest.getContent(), CharEncoding.UTF_8));
                         }
                     }
                 }
@@ -99,7 +100,12 @@ public class ClientToProxyRequestFilter {
                 return null;
             }
             // 保存Mock 记录
-            MockProxy mockProxy = mockProxyCache.get(getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST))), port);
+            String url = getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST)));
+            MockProxy mockProxy = mockProxyCache.get(url, port);
+            if (null == mockProxy && url.indexOf("?") != -1) {
+                String uri = url.substring(0,url.indexOf("?"));
+                mockProxy = mockProxyCache.get(uri, port);
+            }
             if (mockProxy != null) {
                 mockProxyHistoryMapper.insertSelective(MockProxyHistory.builder()
                         .mock_id(mockProxy.getId())
@@ -108,15 +114,16 @@ public class ClientToProxyRequestFilter {
                         .headers(mockProxy.getHeaders())
                         .response(mockProxy.getResponse())
                         .method(mockProxy.getMethod())
-                        .url(mockProxy.getUrl())
+                        .url(url)
                         .build());
+                return mockMatcher.getResponse(mockProxy);
             }
-            return mockMatcher.getResponseByUrl(getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST))), port);
 
         } catch (IOException e) {
             log.error("clientToProxyRequest执行异常：" + e);
             return null;
         }
+        return null;
     }
 
     /**

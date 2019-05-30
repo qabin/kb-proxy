@@ -40,7 +40,7 @@ public class ProxyToClientResponseFilter {
                 requestDetailMapper.updateByPrimaryKeySelective(RequestDetail.builder()
                         .id(LocalCacheUtils.get(originalRequest))
                         .code(getHttpCode(myResponse.getCode().toString()))
-                        .mime_type(((DefaultFullHttpResponse) httpObject).headers().get("Content-type"))
+                        .mime_type(((DefaultFullHttpResponse) httpObject).headers().get(HttpHeaders.Names.CONTENT_TYPE))
                         .update_time(new Date())
                         .build());
                 responseMap.put(originalRequest, myResponse);

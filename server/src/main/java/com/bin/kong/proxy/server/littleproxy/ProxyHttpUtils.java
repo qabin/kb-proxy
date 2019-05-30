@@ -35,7 +35,7 @@ public class ProxyHttpUtils {
      */
     public static void dealHttpContent(HttpContent httpObject, HttpRequest originalRequest, HttpEntity myRequest, io.netty.handler.codec.http.HttpHeaders httpHeaders, Map<Object, HttpEntity> requestMap) {
         if (httpHeaders != null) {
-            String contentType = httpHeaders.get("Content-Type");
+            String contentType = httpHeaders.get(HttpHeaders.Names.CONTENT_TYPE);
             if (contentType != null && !contentType.contains("image") && !contentType.contains("audio")
                     && !contentType.contains("zip") && !contentType.contains("application/octet-stream")
             ) {

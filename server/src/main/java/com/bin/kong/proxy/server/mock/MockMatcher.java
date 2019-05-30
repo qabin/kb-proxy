@@ -23,10 +23,14 @@ public class MockMatcher {
     private MockProxyCache mockProxyCache;
 
     public DefaultFullHttpResponse getResponseByUrl(String url, Integer port) {
-        MockProxy MockProxy = mockProxyCache.get(url, port);
-        if (null != MockProxy) {
+        MockProxy mockProxy = mockProxyCache.get(url, port);
+        return getResponse(mockProxy);
+    }
+
+    public DefaultFullHttpResponse getResponse(MockProxy mockProxy) {
+        if (null != mockProxy) {
             DefaultHttpHeaders httpHeaders = new DefaultHttpHeaders();
-            String headers = MockProxy.getHeaders();
+            String headers = mockProxy.getHeaders();
             if (StringUtils.isNotEmpty(headers)) {
                 try {
                     JSONObject headerOb = JSON.parseObject(headers);
@@ -39,8 +43,8 @@ public class MockMatcher {
                 }
             }
             return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                    HttpResponseStatus.OK,
-                    Unpooled.copiedBuffer(MockProxy.getResponse() != null ? MockProxy.getResponse() : "", CharsetUtil.UTF_8),
+                    HttpResponseStatus.valueOf(mockProxy.getCode()),
+                    Unpooled.copiedBuffer(mockProxy.getResponse() != null ? mockProxy.getResponse() : "", CharsetUtil.UTF_8),
                     httpHeaders,
                     httpHeaders
             );

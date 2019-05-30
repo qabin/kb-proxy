@@ -6,6 +6,7 @@ import com.bin.kong.proxy.core.utils.HttpUtils;
 import com.bin.kong.proxy.dao.mapper.repeater.RepeaterRequestHistoryMapper;
 import com.bin.kong.proxy.model.repeater.entity.RepeaterRequestHistory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,13 +52,13 @@ public class RequestUtilsController {
             } else if (request.getMethod().equals(HttpMethod.POST.name()) || request.getMethod().equals(HttpMethod.PUT.name()) || request.getMethod().equals(HttpMethod.PATCH.name())) {
                 Map<String, String> headerMap = new HashMap<>();
                 if (null != request.getBody_type() && request.getBody_type().equals("form")) {
-                    if (null != request.getHeader() && request.getHeader().get("Content-Type") != null && request.getHeader().get("Content-Type").contains("x-www-form-urlencoded")) {
+                    if (null != request.getHeader() && request.getHeader().get(HttpHeaders.CONTENT_TYPE) != null && request.getHeader().get(HttpHeaders.CONTENT_TYPE).contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
                         headerMap = request.getHeader();
                     } else if (null != request.getHeader()) {
                         headerMap = request.getHeader();
-                        headerMap.put("Content-Type", "application/x-www-form-urlencoded");
+                        headerMap.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
                     } else {
-                        headerMap.put("Content-Type", "application/x-www-form-urlencoded");
+                        headerMap.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
                     }
                 } else {
                     headerMap = request.getHeader();

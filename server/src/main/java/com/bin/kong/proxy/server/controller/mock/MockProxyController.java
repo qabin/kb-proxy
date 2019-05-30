@@ -68,6 +68,7 @@ public class MockProxyController {
                 Integer count = mockProxyMapper.deleteByPrimaryKey(id);
                 response.setData(count);
             } else if (request.getMethod().equals(HttpMethod.PATCH.name())) {
+                MockProxy oldMockProxy = mockProxyMapper.selectByPrimaryKey(id);
                 MockProxy mockProxy = MockProxy.builder()
                         .id(id)
                         .update_time(new Date())
@@ -79,11 +80,17 @@ public class MockProxyController {
                         .name(body.getName())
                         .description(body.getDescription())
                         .is_used(body.getIs_used())
+                        .only_uri(body.getOnly_uri())
                         .build();
                 Integer count = mockProxyMapper.updateByPrimaryKeySelective(mockProxy);
                 response.setData(count);
                 //更新缓存
-                mockProxyCache.put(body.getUrl(), 9999, mockProxy);
+                if (mockProxy.getIs_used() == 1) {
+                    mockProxyCache.remove(mockProxyCache.getCacheKey(oldMockProxy, 9999));
+                    mockProxyCache.put(mockProxyCache.getCacheKey(mockProxy, 9999), mockProxy);
+                } else {
+                    mockProxyCache.remove(mockProxyCache.getCacheKey(oldMockProxy, 9999));
+                }
 
             }
             response.setStatus(ResponseConstants.SUCCESS_CODE);
@@ -112,10 +119,11 @@ public class MockProxyController {
                     .response(body.getResponse())
                     .url(body.getUrl())
                     .user_id(1)
+                    .only_uri(body.getOnly_uri())
                     .build();
             mockProxyMapper.insertSelective(mockProxy);
             //添加缓存
-            mockProxyCache.put(body.getUrl(), 9999, mockProxy);
+            mockProxyCache.put(mockProxyCache.getCacheKey(mockProxy, 9999), mockProxy);
             response.setStatus(ResponseConstants.SUCCESS_CODE);
             response.setData(mockProxy.getId());
         } catch (Exception e) {

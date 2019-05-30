@@ -38,4 +38,6 @@ public class MockProxy {
 
     private Date update_time;
 
+    private Integer only_uri;
+
 }

@@ -8,6 +8,7 @@ import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.proxy.entity.ResponseDetail;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class ServerToProxyResponseFilter {
                     requestDetailMapper.updateByPrimaryKeySelective(RequestDetail.builder()
                             .id(LocalCacheUtils.get(originalRequest))
                             .code(getHttpCode(myResponse.getCode().toString()))
-                            .mime_type(((HttpResponse) httpObject).headers().get("Content-type"))
+                            .mime_type(((HttpResponse) httpObject).headers().get(HttpHeaders.Names.CONTENT_TYPE))
                             .update_time(new Date())
                             .build());
                     responseMap.put(originalRequest, myResponse);
@@ -61,11 +62,11 @@ public class ServerToProxyResponseFilter {
                             ByteArrayInputStream bais = new ByteArrayInputStream(myResponse.getContent());
                             GZIPInputStream gzis = new GZIPInputStream(bais);
                             byte[] decompressedData = IOUtils.toByteArray(gzis);
-                            responseDetail.setBody(new String(decompressedData, "utf-8"));
+                            responseDetail.setBody(new String(decompressedData, CharEncoding.UTF_8));
                         }
                     } else {
                         if (myResponse.getContent() != null) {
-                            responseDetail.setBody(new String(myResponse.getContent(), "utf-8"));
+                            responseDetail.setBody(new String(myResponse.getContent(), CharEncoding.UTF_8));
                         }
                     }
                 }

@@ -26,7 +26,8 @@ public class MockProxyCache {
                     .build());
 
             for (MockProxy MockProxy : MockProxySearchList) {
-                LocalCacheUtils.putIfAbsent(getCacheKey(MockProxy.getUrl(), MockProxy.getProxy_port()), MockProxy, 100000, TimeUnit.DAYS);
+                LocalCacheUtils.putIfAbsent(getCacheKey(MockProxy, MockProxy.getProxy_port()), MockProxy, 100000, TimeUnit.DAYS);
+
             }
         } catch (Exception e) {
             log.error("初始化加载Mock配置异常");
@@ -47,12 +48,11 @@ public class MockProxyCache {
     /**
      * 添加缓存
      *
-     * @param url
-     * @param port
+     * @param key
      * @param MockProxy
      */
-    public void put(String url, Integer port, MockProxy MockProxy) {
-        LocalCacheUtils.put(getCacheKey(url, port), MockProxy, 100000, TimeUnit.DAYS);
+    public void put(String key, MockProxy MockProxy) {
+        LocalCacheUtils.put(key, MockProxy, 100000, TimeUnit.DAYS);
     }
 
     /**
@@ -66,6 +66,15 @@ public class MockProxyCache {
     }
 
     /**
+     * 删除缓存
+     *
+     * @param key
+     */
+    public void remove(String key) {
+        LocalCacheUtils.remove(key);
+    }
+
+    /**
      * 获取配置
      *
      * @param url
@@ -74,5 +83,20 @@ public class MockProxyCache {
      */
     public MockProxy get(String url, Integer port) {
         return LocalCacheUtils.get(getCacheKey(url, port));
+    }
+
+    /**
+     * 获取缓存KEY
+     *
+     * @param mockProxy
+     * @param port
+     * @return
+     */
+    public String getCacheKey(MockProxy mockProxy, Integer port) {
+        String url = mockProxy.getUrl();
+        if (mockProxy.getOnly_uri() == 1 && url.indexOf("?") != -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        return getCacheKey(url, port);
     }
 }

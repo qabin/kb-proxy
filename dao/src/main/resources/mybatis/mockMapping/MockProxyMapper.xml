@@ -15,9 +15,10 @@
         <result column="proxy_port" property="proxy_port" jdbcType="INTEGER"/>
         <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="only_uri" property="only_uri" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, description, url, method, code,response,headers,is_used,user_id,proxy_port,create_time,update_time
+    id, name, description, url, method, code,response,headers,is_used,user_id,proxy_port,create_time,update_time,only_uri
   </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -74,6 +75,9 @@
             <if test="update_time != null">
                 update_time,
             </if>
+            <if test="only_uri != null">
+                only_uri,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -114,6 +118,9 @@
             </if>
             <if test="update_time != null">
                 #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="only_uri != null">
+                #{only_uri,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -156,6 +163,9 @@
             <if test="update_time != null">
                 update_time = #{update_time,jdbcType=TIMESTAMP},
             </if>
+            <if test="only_uri != null">
+                only_uri = #{only_uri,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -165,7 +175,7 @@
         select
         <include refid="Base_Column_List"/>
         from mock_proxy
-        where 1=1 and is_used =1
+        where 1=1
         <if test="kw != null and kw.length>0">
             and (name like CONCAT('%',#{kw},'%') or url like CONCAT('%',#{kw},'%'))
         </if>
@@ -180,7 +190,7 @@
         select
         count(*)
         from mock_proxy
-        where 1=1 and is_used =1
+        where 1=1
         <if test="kw != null and kw.length>0">
             and (name like CONCAT('%',#{kw},'%') or url like CONCAT('%',#{kw},'%'))
         </if>
