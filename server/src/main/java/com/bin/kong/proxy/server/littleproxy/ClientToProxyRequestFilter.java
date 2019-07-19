@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bin.kong.proxy.core.cache.impl.LocalCacheUtils;
 import com.bin.kong.proxy.dao.mapper.mock.MockProxyHistoryMapper;
 import com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper;
-import com.bin.kong.proxy.model.join.entity.MockProxyJoinUserInfo;
+import com.bin.kong.proxy.model.mock.entity.MockProxy;
 import com.bin.kong.proxy.model.mock.entity.MockProxyHistory;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.server.mock.MockMatcher;
@@ -101,7 +101,7 @@ public class ClientToProxyRequestFilter {
             }
             // 保存Mock 记录
             String url = getUrl(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST), getPath(originalRequest.uri(), originalRequest.headers().get(HttpHeaders.HOST)));
-            MockProxyJoinUserInfo mockProxy = mockProxyCache.get(url, port);
+            MockProxy mockProxy = mockProxyCache.get(url, port);
             if (null == mockProxy && url.indexOf("?") != -1) {
                 String uri = url.substring(0, url.indexOf("?"));
                 mockProxy = mockProxyCache.get(uri, port);

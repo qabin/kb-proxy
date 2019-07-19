@@ -1,8 +1,7 @@
 package com.bin.kong.proxy.server.mock;
 
 import com.bin.kong.proxy.core.cache.impl.LocalCacheUtils;
-import com.bin.kong.proxy.dao.mapper.join.MockProxyJoinUserInfoMapper;
-import com.bin.kong.proxy.model.join.entity.MockProxyJoinUserInfo;
+import com.bin.kong.proxy.dao.mapper.mock.MockProxyMapper;
 import com.bin.kong.proxy.model.mock.entity.MockProxy;
 import com.bin.kong.proxy.model.mock.search.MockProxySearch;
 import lombok.extern.slf4j.Slf4j;
@@ -16,22 +15,22 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MockProxyCache {
     @Resource
-    private MockProxyJoinUserInfoMapper mockProxyJoinUserInfoMapper;
+    private MockProxyMapper mockProxyMapper;
 
     /**
      * 初始化加载 所有Mock 配置
      */
     public void init() {
         try {
-            List<MockProxyJoinUserInfo> MockProxySearchList = mockProxyJoinUserInfoMapper.searchList(MockProxySearch.builder()
+            List<MockProxy> mockProxyList = mockProxyMapper.searchList(MockProxySearch.builder()
                     .build());
 
-            for (MockProxyJoinUserInfo mockProxyJoinUserInfo : MockProxySearchList) {
-                LocalCacheUtils.putIfAbsent(getCacheKey(mockProxyJoinUserInfo, mockProxyJoinUserInfo.getPort()), mockProxyJoinUserInfo, 100000, TimeUnit.DAYS);
+            for (MockProxy mockProxy : mockProxyList) {
+                LocalCacheUtils.putIfAbsent(getCacheKey(mockProxy, mockProxy.getUser_id()), mockProxy, 100000, TimeUnit.DAYS);
 
             }
         } catch (Exception e) {
-            log.error("初始化加载Mock配置异常"+e);
+            log.error("初始化加载Mock配置异常" + e);
         }
     }
 
@@ -50,10 +49,10 @@ public class MockProxyCache {
      * 添加缓存
      *
      * @param key
-     * @param MockProxy
+     * @param mockProxy
      */
-    public void put(String key, MockProxy MockProxy) {
-        LocalCacheUtils.put(key, MockProxy, 100000, TimeUnit.DAYS);
+    public void put(String key, MockProxy mockProxy) {
+        LocalCacheUtils.put(key, mockProxy, 100000, TimeUnit.DAYS);
     }
 
     /**
@@ -82,20 +81,20 @@ public class MockProxyCache {
      * @param port
      * @return
      */
-    public MockProxyJoinUserInfo get(String url, Integer port) {
+    public MockProxy get(String url, Integer port) {
         return LocalCacheUtils.get(getCacheKey(url, port));
     }
 
     /**
      * 获取缓存KEY
      *
-     * @param mockProxyJoinUserInfo
+     * @param mockProxy
      * @param port
      * @return
      */
-    public String getCacheKey(MockProxyJoinUserInfo mockProxyJoinUserInfo, Integer port) {
-        String url = mockProxyJoinUserInfo.getUrl();
-        if (mockProxyJoinUserInfo.getOnly_uri() == 1 && url.indexOf("?") != -1) {
+    public String getCacheKey(MockProxy mockProxy, Integer port) {
+        String url = mockProxy.getUrl();
+        if (mockProxy.getOnly_uri() == 1 && url.indexOf("?") != -1) {
             url = url.substring(0, url.indexOf("?"));
         }
         return getCacheKey(url, port);

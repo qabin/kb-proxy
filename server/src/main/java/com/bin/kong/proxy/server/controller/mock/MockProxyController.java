@@ -109,7 +109,7 @@ public class MockProxyController extends BaseController {
         try {
             MockProxy mockProxy = mockProxyMapper.selectByPrimaryKey(id);
             //删除缓存
-            mockProxyCache.remove(mockProxy.getUrl(), super.getUserInfo().getId());
+            mockProxyCache.remove(mockProxyCache.getCacheKey(mockProxy.getUrl(), mockProxy.getOnly_uri(), super.getUserInfo().getId()));
             Integer count = mockProxyMapper.deleteByPrimaryKey(id);
             response.setData(count);
 

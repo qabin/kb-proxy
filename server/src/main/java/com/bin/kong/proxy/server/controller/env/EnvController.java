@@ -34,6 +34,7 @@ public class EnvController extends BaseController {
         try {
             envInfo.setCreate_time(new Date());
             envInfo.setUpdate_time(new Date());
+            envInfo.setStatus(EnvStatusEnum.STOP.getCode());
             envInfo.setUser_id(super.getUserInfo().getId());
             envInfoMapper.insertSelective(envInfo);
             response.setData(envInfo);
