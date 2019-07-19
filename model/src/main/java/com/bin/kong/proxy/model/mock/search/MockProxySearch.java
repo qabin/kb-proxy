@@ -16,6 +16,8 @@ public class MockProxySearch {
     @Builder.Default
     private Integer page = 0;
 
+    private Integer user_id;
+
     private Integer startNum;
 
     public Integer getStartNum() {

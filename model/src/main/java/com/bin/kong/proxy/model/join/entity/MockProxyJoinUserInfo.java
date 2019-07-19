@@ -1,4 +1,4 @@
-package com.bin.kong.proxy.model.mock.entity;
+package com.bin.kong.proxy.model.join.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MockProxy {
+public class MockProxyJoinUserInfo {
     private Integer id;
 
     private String name;
@@ -40,4 +40,5 @@ public class MockProxy {
 
     private String domain;
 
+    private Integer port;
 }

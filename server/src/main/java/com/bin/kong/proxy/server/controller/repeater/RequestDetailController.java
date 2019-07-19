@@ -3,23 +3,22 @@ package com.bin.kong.proxy.server.controller.repeater;
 import com.bin.kong.proxy.contract.common.GenericResponse;
 import com.bin.kong.proxy.core.constants.ResponseConstants;
 import com.bin.kong.proxy.dao.mapper.repeater.RepeaterRequestDetailMapper;
-import com.bin.kong.proxy.dao.mapper.repeater.RequestFolderJoinDetailMapper;
+import com.bin.kong.proxy.dao.mapper.join.RequestFolderJoinDetailMapper;
+import com.bin.kong.proxy.model.join.entity.RequestFolderJoinDetail;
 import com.bin.kong.proxy.model.repeater.entity.RepeaterRequestDetail;
-import com.bin.kong.proxy.model.repeater.entity.RequestDetailJoinFolder;
 import com.bin.kong.proxy.model.repeater.search.CollectionSearch;
+import com.bin.kong.proxy.server.controller.BaseController;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @Slf4j
-public class RequestDetailController {
+public class RequestDetailController extends BaseController {
     @Resource
     private RequestFolderJoinDetailMapper folderJoinDetailMapper;
     @Resource
@@ -29,8 +28,9 @@ public class RequestDetailController {
     public GenericResponse detail_list(@RequestParam(required = false) String kw) {
         GenericResponse response = new GenericResponse();
         try {
-            List<RequestDetailJoinFolder> detailJoinFolderList = folderJoinDetailMapper.searchListWithFolder(CollectionSearch.builder()
+            List<RequestFolderJoinDetail> detailJoinFolderList = folderJoinDetailMapper.searchListWithFolder(CollectionSearch.builder()
                     .kw(kw)
+                    .user_id(super.getUserInfo().getId())
                     .build());
             response.setData(detailJoinFolderList);
             response.setStatus(ResponseConstants.SUCCESS_CODE);
@@ -41,23 +41,34 @@ public class RequestDetailController {
         return response;
     }
 
-    @RequestMapping(value = "/details/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericResponse detail_options(@PathVariable("id") Integer id, @RequestBody(required = false) RepeaterRequestDetail detail, HttpServletRequest request) {
+    @RequestMapping(value = "/details/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericResponse detail_delete(@PathVariable("id") Integer id) {
         GenericResponse response = new GenericResponse();
         try {
-            if (request.getMethod().equals(HttpMethod.DELETE.name())) {
-                Integer count = repeaterRequestDetailMapper.deleteByPrimaryKey(id);
-                response.setData(count);
-            } else if (request.getMethod().equals(HttpMethod.PATCH.name())) {
-                RepeaterRequestDetail requestDetail = detail;
-                requestDetail.setUpdate_time(new Date());
-                Integer count = repeaterRequestDetailMapper.updateByPrimaryKeySelective(requestDetail);
-                response.setData(count);
-            }
+            Integer count = repeaterRequestDetailMapper.deleteByPrimaryKey(id);
+            response.setData(count);
+
             response.setStatus(ResponseConstants.SUCCESS_CODE);
         } catch (Exception e) {
             response.setStatus(ResponseConstants.FAIL_CODE);
-            log.error("detail_options执行异常：" + e);
+            log.error("detail_delete执行异常：" + e);
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "/details/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericResponse detail_update(@PathVariable("id") Integer id, @RequestBody RepeaterRequestDetail detail) {
+        GenericResponse response = new GenericResponse();
+        try {
+            RepeaterRequestDetail requestDetail = detail;
+            requestDetail.setUpdate_time(new Date());
+            requestDetail.setId(id);
+            Integer count = repeaterRequestDetailMapper.updateByPrimaryKeySelective(requestDetail);
+            response.setData(count);
+            response.setStatus(ResponseConstants.SUCCESS_CODE);
+        } catch (Exception e) {
+            response.setStatus(ResponseConstants.FAIL_CODE);
+            log.error("detail_update执行异常：" + e);
         }
         return response;
     }
@@ -67,7 +78,7 @@ public class RequestDetailController {
         GenericResponse response = new GenericResponse();
         try {
             RepeaterRequestDetail requestDetail = detail;
-            requestDetail.setUser_id(1);
+            requestDetail.setUser_id(super.getUserInfo().getId());
             requestDetail.setCreate_time(new Date());
             requestDetail.setUpdate_time(new Date());
             Integer count = repeaterRequestDetailMapper.insertSelective(requestDetail);

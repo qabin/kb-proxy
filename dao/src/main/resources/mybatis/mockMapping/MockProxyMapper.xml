@@ -12,13 +12,13 @@
         <result column="headers" property="headers" jdbcType="VARCHAR"/>
         <result column="is_used" property="is_used" jdbcType="INTEGER"/>
         <result column="user_id" property="user_id" jdbcType="INTEGER"/>
-        <result column="proxy_port" property="proxy_port" jdbcType="INTEGER"/>
         <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
         <result column="only_uri" property="only_uri" jdbcType="INTEGER"/>
+        <result column="domain" property="domain" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, description, url, method, code,response,headers,is_used,user_id,proxy_port,create_time,update_time,only_uri
+    id, name, description, url, method, code,response,headers,is_used,user_id,create_time,update_time,only_uri,domain
   </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -66,9 +66,6 @@
             <if test="user_id != null">
                 user_id,
             </if>
-            <if test="proxy_port != null">
-                proxy_port,
-            </if>
             <if test="create_time != null">
                 create_time,
             </if>
@@ -77,6 +74,9 @@
             </if>
             <if test="only_uri != null">
                 only_uri,
+            </if>
+            <if test="domain != null">
+                domain,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -110,9 +110,6 @@
             <if test="user_id != null">
                 #{user_id,jdbcType=INTEGER},
             </if>
-            <if test="proxy_port != null">
-                #{proxy_port,jdbcType=INTEGER},
-            </if>
             <if test="create_time != null">
                 #{create_time,jdbcType=TIMESTAMP},
             </if>
@@ -121,6 +118,9 @@
             </if>
             <if test="only_uri != null">
                 #{only_uri,jdbcType=INTEGER},
+            </if>
+            <if test="domain != null">
+                #{domain,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -154,9 +154,6 @@
             <if test="user_id != null">
                 user_id = #{user_id,jdbcType=INTEGER},
             </if>
-            <if test="proxy_port != null">
-                proxy_port = #{proxy_port,jdbcType=INTEGER},
-            </if>
             <if test="create_time != null">
                 create_time = #{create_time,jdbcType=TIMESTAMP},
             </if>
@@ -165,6 +162,9 @@
             </if>
             <if test="only_uri != null">
                 only_uri = #{only_uri,jdbcType=INTEGER},
+            </if>
+            <if test="domain != null">
+                domain = #{domain,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -178,6 +178,9 @@
         where 1=1
         <if test="kw != null and kw.length>0">
             and (name like CONCAT('%',#{kw},'%') or url like CONCAT('%',#{kw},'%'))
+        </if>
+        <if test="user_id != null">
+            and user_id=#{user_id}
         </if>
         order by id desc
         <if test="page != null and size !=null">
@@ -193,6 +196,9 @@
         where 1=1
         <if test="kw != null and kw.length>0">
             and (name like CONCAT('%',#{kw},'%') or url like CONCAT('%',#{kw},'%'))
+        </if>
+        <if test="user_id != null">
+            and user_id=#{user_id}
         </if>
     </select>
 

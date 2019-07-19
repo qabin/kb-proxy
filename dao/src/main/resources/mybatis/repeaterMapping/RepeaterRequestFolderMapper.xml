@@ -21,7 +21,8 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.repeater.entity.RepeaterRequestFolder">
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.repeater.entity.RepeaterRequestFolder"
+            useGeneratedKeys="true" keyProperty="id">
         insert into repeater_request_folder
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

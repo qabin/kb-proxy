@@ -1,4 +1,4 @@
-package com.bin.kong.proxy.model.repeater.entity;
+package com.bin.kong.proxy.model.join.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDetailJoinFolder {
+public class RequestFolderJoinDetail {
     private Integer id;
 
     private String name;

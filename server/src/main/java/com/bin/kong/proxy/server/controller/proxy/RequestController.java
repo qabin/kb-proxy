@@ -5,18 +5,17 @@ import com.bin.kong.proxy.core.constants.ResponseConstants;
 import com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.proxy.search.RequestSearch;
+import com.bin.kong.proxy.server.controller.BaseController;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @Slf4j
-public class RequestController {
+public class RequestController extends BaseController {
     @Resource
     private RequestDetailMapper requestDetailMapper;
 
@@ -48,18 +47,16 @@ public class RequestController {
      *
      * @return
      */
-    @RequestMapping(value = "/requests", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericResponse request_list_options(HttpServletRequest request) {
+    @RequestMapping(value = "/requests", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericResponse request_list_delete() {
         GenericResponse response = new GenericResponse();
         try {
-            if (request.getMethod().equals(HttpMethod.DELETE.name())) {
-                Integer count = requestDetailMapper.deleteByPort(9999);
-                response.setData(count);
-            }
+            Integer count = requestDetailMapper.deleteByPort(super.getUserInfo().getId());
+            response.setData(count);
             response.setStatus(ResponseConstants.SUCCESS_CODE);
         } catch (Exception e) {
             response.setStatus(ResponseConstants.FAIL_CODE);
-            log.error("执行request_list_options异常：" + e);
+            log.error("执行request_list_delete异常：" + e);
         }
         return response;
     }
@@ -83,4 +80,5 @@ public class RequestController {
         }
         return response;
     }
+
 }

@@ -2,7 +2,7 @@ package com.bin.kong.proxy.server.mock;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.bin.kong.proxy.model.mock.entity.MockProxy;
+import com.bin.kong.proxy.model.join.entity.MockProxyJoinUserInfo;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
@@ -23,11 +23,11 @@ public class MockMatcher {
     private MockProxyCache mockProxyCache;
 
     public DefaultFullHttpResponse getResponseByUrl(String url, Integer port) {
-        MockProxy mockProxy = mockProxyCache.get(url, port);
+        MockProxyJoinUserInfo mockProxy = mockProxyCache.get(url, port);
         return getResponse(mockProxy);
     }
 
-    public DefaultFullHttpResponse getResponse(MockProxy mockProxy) {
+    public DefaultFullHttpResponse getResponse(MockProxyJoinUserInfo mockProxy) {
         if (null != mockProxy) {
             DefaultHttpHeaders httpHeaders = new DefaultHttpHeaders();
             String headers = mockProxy.getHeaders();
