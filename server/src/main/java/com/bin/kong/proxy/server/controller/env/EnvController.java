@@ -68,9 +68,17 @@ public class EnvController extends BaseController {
     public GenericResponse ajax_delete_env_info(@PathVariable("id") Integer id) {
         GenericResponse response = new GenericResponse();
         try {
-            envInfoMapper.deleteByPrimaryKey(id);
+            EnvInfo envInfo =envInfoMapper.selectByPrimaryKey(id);
+            if(null!=envInfo){
+                envInfoMapper.deleteByPrimaryKey(id);
+                hostCache.remove(super.getUserInfo().getId());
+                if(envInfo.getStatus()==EnvStatusEnum.START.getCode()){
+                    proxyServer.stopProxy(super.getUserInfo().getId());
+                    proxyServer.startProxy(super.getUserInfo().getId());
+                }
+            }
 
-            hostCache.remove(super.getUserInfo().getId());
+
             response.setStatus(ResponseConstants.SUCCESS_CODE);
         } catch (Exception e) {
             response.setStatus(ResponseConstants.FAIL_CODE);

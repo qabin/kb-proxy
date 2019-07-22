@@ -63,7 +63,7 @@ public class LittleProxyServer {
      */
     public void startProxy(Integer port) {
         try {
-            if (proxyServerCache.get(port) == null) {
+            if (proxyServerCache.get(port) == null && null == proxyServerCache.get(port)) {
                 HttpProxyServer httpProxyServer = DefaultHttpProxyServer.bootstrap()
                         .withAddress(new InetSocketAddress(IpUtils.getLocalHostLANAddress().getHostAddress(), port))
                         .withManInTheMiddle(new CertificateSniffingMitmManager())
@@ -126,6 +126,7 @@ public class LittleProxyServer {
 
     /**
      * 重启代理
+     *
      * @param port
      */
     public void restartProxy(Integer port) {
