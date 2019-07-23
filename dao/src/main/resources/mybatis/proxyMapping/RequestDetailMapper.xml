@@ -164,6 +164,9 @@
         <if test="max_id != null and max_id>0">
             and id>#{max_id}
         </if>
+        <if test="proxy_port != null">
+            and proxy_port=#{proxy_port}
+        </if>
         <if test="kw!=null">
             and (method like CONCAT('%',#{kw},'%')
             or url like CONCAT('%',#{kw},'%')

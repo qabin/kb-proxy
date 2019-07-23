@@ -31,6 +31,7 @@ public class RequestController extends BaseController {
         try {
             List<RequestDetail> requestDetailList = requestDetailMapper.searchList(RequestSearch.builder()
                     .max_id(maxId)
+                    .proxy_port(super.getUserInfo().getId())
                     .kw(kw)
                     .build());
             response.setData(requestDetailList);

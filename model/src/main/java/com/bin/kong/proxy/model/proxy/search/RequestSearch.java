@@ -8,4 +8,5 @@ import lombok.Data;
 public class RequestSearch {
     private Integer max_id;
     private String kw;
+    private Integer proxy_port;
 }
