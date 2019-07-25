@@ -7,7 +7,7 @@ import localStorage from '../utils/local_storage_utils'
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   base: '/',
   routes
 })
