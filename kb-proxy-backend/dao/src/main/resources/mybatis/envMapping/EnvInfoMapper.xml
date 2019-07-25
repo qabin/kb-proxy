@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bin.kong.proxy.dao.mapper.env.EnvInfoMapper">
+    <resultMap id="BaseResultMap" type="com.bin.kong.proxy.model.env.entity.EnvInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="hosts" property="hosts" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, user_id, create_time, update_time, status,hosts
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from env_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from env_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertSelective" parameterType="com.bin.kong.proxy.model.env.entity.EnvInfo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into env_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="user_id != null">
+                user_id,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="update_time != null">
+                update_time,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="hosts != null">
+                hosts,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="user_id != null">
+                #{user_id,jdbcType=INTEGER},
+            </if>
+            <if test="create_time != null">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_time != null">
+                #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="hosts != null">
+                #{hosts,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bin.kong.proxy.model.env.entity.EnvInfo">
+        update env_info
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                create_time = #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="hosts != null">
+                hosts = #{hosts,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="searchList" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.env.search.EnvSearch">
+        select
+        <include refid="Base_Column_List"/>
+        from env_info
+        where 1=1
+        <if test="kw!=null">
+            and name like CONCAT('%',#{kw},'%')
+        </if>
+
+        <if test="user_id!=null">
+            and user_id= #{user_id}
+        </if>
+    </select>
+
+
+    <select id="selectList" resultMap="BaseResultMap"
+            parameterType="com.bin.kong.proxy.model.env.entity.EnvInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from env_info
+        where 1=1
+        <if test="user_id!=null">
+            and user_id =#{user_id}
+        </if>
+        <if test="status!=null">
+            and status =#{status}
+        </if>
+    </select>
+
+    <update id="updateByUserIdSelective" parameterType="com.bin.kong.proxy.model.env.entity.EnvInfo">
+        update env_info
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="create_time != null">
+                create_time = #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_time != null">
+                update_time = #{update_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="hosts != null">
+                hosts = #{hosts,jdbcType=LONGVARCHAR}
+            </if>
+        </set>
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

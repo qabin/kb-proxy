@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend/contract" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend/core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend/dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend/model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kb-proxy-backend/server" charset="UTF-8" />
+  </component>
+</project>
