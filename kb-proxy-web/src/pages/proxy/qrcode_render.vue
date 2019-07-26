@@ -18,7 +18,7 @@
     }),
     computed: {
       ca_url() {
-        return 'http://' + this.$store.state.user.ip + '/static/ca/littleproxy-mitm.pem'
+        return 'http://' + this.$store.state.user.ip + ':8080/static/ca/littleproxy-mitm.pem'
       },
     },
     methods: {
