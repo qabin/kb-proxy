@@ -3,6 +3,7 @@ package com.bin.kong.proxy.server.controller.proxy;
 import com.bin.kong.proxy.contract.common.GenericResponse;
 import com.bin.kong.proxy.core.constants.ResponseConstants;
 import com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper;
+import com.bin.kong.proxy.dao.mapper.proxy.ResponseDetailMapper;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.proxy.search.RequestSearch;
 import com.bin.kong.proxy.server.controller.BaseController;
@@ -18,6 +19,8 @@ import java.util.List;
 public class RequestController extends BaseController {
     @Resource
     private RequestDetailMapper requestDetailMapper;
+    @Resource
+    private ResponseDetailMapper responseDetailMapper;
 
     /**
      * 请求记录 搜索
@@ -29,13 +32,15 @@ public class RequestController extends BaseController {
     public GenericResponse request_list_search(@RequestParam Integer maxId, @RequestParam(required = false) String kw) {
         GenericResponse response = new GenericResponse();
         try {
-            List<RequestDetail> requestDetailList = requestDetailMapper.searchList(RequestSearch.builder()
-                    .max_id(maxId)
-                    .proxy_port(super.getUserInfo().getId())
-                    .kw(kw)
-                    .build());
-            response.setData(requestDetailList);
-            response.setStatus(ResponseConstants.SUCCESS_CODE);
+            if(super.getUserInfo()!=null){
+                List<RequestDetail> requestDetailList = requestDetailMapper.searchList(RequestSearch.builder()
+                        .max_id(maxId)
+                        .proxy_port(super.getUserInfo().getId())
+                        .kw(kw)
+                        .build());
+                response.setData(requestDetailList);
+                response.setStatus(ResponseConstants.SUCCESS_CODE);
+            }
         } catch (Exception e) {
             response.setStatus(ResponseConstants.FAIL_CODE);
             log.error("执行request_list_search异常：" + e);
@@ -52,6 +57,7 @@ public class RequestController extends BaseController {
     public GenericResponse request_list_delete() {
         GenericResponse response = new GenericResponse();
         try {
+            responseDetailMapper.deleteByPort(super.getUserInfo().getId());
             Integer count = requestDetailMapper.deleteByPort(super.getUserInfo().getId());
             response.setData(count);
             response.setStatus(ResponseConstants.SUCCESS_CODE);

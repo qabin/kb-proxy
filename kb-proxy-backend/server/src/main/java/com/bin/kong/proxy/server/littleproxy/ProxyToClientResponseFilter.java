@@ -32,7 +32,7 @@ public class ProxyToClientResponseFilter {
 
     private static Map<Object, HttpEntity> responseMap = new HashMap<>();
 
-    public HttpObject proxyToClientResponse(HttpObject httpObject, HttpRequest originalRequest) {
+    public HttpObject proxyToClientResponse(HttpObject httpObject, HttpRequest originalRequest,Integer port) {
         try {
             if (LocalCacheUtils.get(originalRequest) == null || ((ProxyRequestCacheDO) LocalCacheUtils.get(originalRequest)).getMock() != MockStatusEnum.IS_MOCK.getCode()) {
                 return httpObject;
@@ -72,6 +72,7 @@ public class ProxyToClientResponseFilter {
                     responseDetail.setHeader(JSON.toJSONString(ProxyHttpUtils.getHeaderMap(((DefaultFullHttpResponse) httpObject).headers())));
                     responseDetail.setCreate_time(new Date());
                     responseDetail.setUpdate_time(new Date());
+                    responseDetail.setProxy_port(port);
                     responseDetailMapper.insertSelective(responseDetail);
                     //删除缓存
                     LocalCacheUtils.remove(originalRequest);

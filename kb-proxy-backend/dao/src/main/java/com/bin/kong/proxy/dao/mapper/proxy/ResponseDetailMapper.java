@@ -7,6 +7,8 @@ import java.util.List;
 public interface ResponseDetailMapper {
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByPort(Integer proxy_port);
+
     int insertSelective(ResponseDetail record);
 
     ResponseDetail selectByPrimaryKey(Integer id);

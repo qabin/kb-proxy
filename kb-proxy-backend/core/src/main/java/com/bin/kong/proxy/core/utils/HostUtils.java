@@ -20,6 +20,8 @@ public class HostUtils {
     public static Map<String, String> getHostMapFromString(String input) {
         Map<String, String> resultMap = new HashMap<>();
         if (!StringUtils.isEmpty(input)) {
+            input = input.replaceAll("\r\n", "\n");
+            input = input.replaceAll("\r", "\n");
             List<String> hostAndIpStrList = Arrays.asList(input.split("\n"));
             if (!CollectionUtils.isEmpty(hostAndIpStrList)) {
                 for (String s : hostAndIpStrList) {

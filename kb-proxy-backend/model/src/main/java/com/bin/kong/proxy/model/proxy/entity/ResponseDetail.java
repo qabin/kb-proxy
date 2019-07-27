@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,4 +25,6 @@ public class ResponseDetail {
     private String header;
 
     private String body;
+
+    private Integer proxy_port;
 }

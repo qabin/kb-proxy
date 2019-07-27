@@ -30,7 +30,7 @@ public class ServerToProxyResponseFilter {
 
     private static Map<Object, HttpEntity> responseMap = new HashMap<>();
 
-    public HttpObject serverToProxyResponse(HttpObject httpObject, HttpRequest originalRequest) {
+    public HttpObject serverToProxyResponse(HttpObject httpObject, HttpRequest originalRequest,Integer port) {
         try {
 
             if (LocalCacheUtils.get(originalRequest) == null) {
@@ -80,6 +80,7 @@ public class ServerToProxyResponseFilter {
                     responseDetail.setCode(getHttpCode(myResponse.getCode().toString()));
                     responseDetail.setHeader(JSON.toJSONString(ProxyHttpUtils.getHeaderMap(myResponse.getHttpHeaders())));
                     responseDetail.setCreate_time(new Date());
+                    responseDetail.setProxy_port(port);
                     responseDetailMapper.insertSelective(responseDetail);
                     //删除缓存
                     LocalCacheUtils.remove(originalRequest);

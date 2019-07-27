@@ -9,9 +9,11 @@
         <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
         <result column="header" property="header" jdbcType="LONGVARCHAR"/>
         <result column="body" property="body" jdbcType="LONGVARCHAR"/>
+        <result column="proxy_port" property="proxy_port" jdbcType="INTEGER"/>
+
     </resultMap>
     <sql id="Base_Column_List">
-    id, request_detail_id, code, create_time, update_time,header, body
+    id, request_detail_id, code, create_time, update_time,header, body,proxy_port
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -48,6 +50,9 @@
             <if test="body != null">
                 body,
             </if>
+            <if test="proxy_port != null">
+                proxy_port,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,6 +75,9 @@
             </if>
             <if test="body != null">
                 #{body,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="proxy_port != null">
+                #{proxy_port,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -95,6 +103,9 @@
             <if test="body != null">
                 body = #{body,jdbcType=LONGVARCHAR},
             </if>
+            <if test="proxy_port != null">
+                proxy_port = #{proxy_port,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -110,4 +121,8 @@
         </if>
     </select>
 
+    <delete id="deleteByPort" parameterType="java.lang.Integer">
+    delete from proxy_response_detail
+    where proxy_port = #{proxy_port,jdbcType=INTEGER}
+  </delete>
 </mapper>

@@ -8,13 +8,13 @@ import com.bin.kong.proxy.core.utils.IpUtils;
 import com.bin.kong.proxy.dao.mapper.user.UserInfoMapper;
 import com.bin.kong.proxy.model.user.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.springframework.http.MediaType;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,11 +36,11 @@ public class UserInfoController {
             Session session = SecurityUtils.getSubject().getSession();
 
             UserInfo userInfo = (UserInfo) session.getAttribute(UserInfoConstants.CURRENT_USER);
-            if (!ObjectUtils.isEmpty(IpUtils.getLocalHostLANAddress()) && !StringUtils.isEmpty(IpUtils.getLocalHostLANAddress().getHostAddress())) {
-                userInfo.setIp(IpUtils.getLocalHostLANAddress().getHostAddress());
-            }
 
             if (userInfo != null && userInfo.getId() != null) {
+                if (!ObjectUtils.isEmpty(IpUtils.getLocalHostLANAddress()) && StringUtils.isNotEmpty(IpUtils.getLocalHostLANAddress().getHostAddress())) {
+                    userInfo.setIp(IpUtils.getLocalHostLANAddress().getHostAddress());
+                }
                 response.setData(userInfo);
                 response.setStatus(ResponseConstants.SUCCESS_CODE);
                 response.setMessage("获取用户信息成功");
