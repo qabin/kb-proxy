@@ -58,6 +58,7 @@ public class LittleProxyServer {
 
     }
 
+
     /**
      * 开启代理服务
      *
@@ -67,13 +68,13 @@ public class LittleProxyServer {
         try {
             if (proxyServerCache.get(port) == null && null == proxyServerCache.get(port)) {
                 Authority authority = new Authority(new File("/proxy/mitm")
-                        , "littleproxy-mitm"
+                        , "kb-proxy-mitm"
                         , "Be Your Own Lantern".toCharArray()
-                        , "LittleProxy-mitm"
-                        , "LittleProxy-mitm, describe proxy here"
+                        , "Kb-Proxy-mitm"
+                        , "Kb-Proxy-mitm, describe proxy here"
                         , "Certificate Authority"
-                        , "LittleProxy-mitm"
-                        , "LittleProxy-mitm, describe proxy purpose here, since Man-In-The-Middle is bad normally.");
+                        , "Kb-Proxy-mitm"
+                        , "Kb-Proxy-mitm, describe proxy purpose here, since Man-In-The-Middle is bad normally.");
                 HttpProxyServer httpProxyServer = DefaultHttpProxyServer.bootstrap()
                         .withAddress(new InetSocketAddress(IpUtils.getLocalHostLANAddress().getHostAddress(), port))
                         .withManInTheMiddle(new CertificateSniffingMitmManager(authority))
@@ -91,12 +92,12 @@ public class LittleProxyServer {
 
                                     @Override
                                     public HttpObject serverToProxyResponse(HttpObject httpObject) {
-                                        return serverToProxyResponseFilter.serverToProxyResponse(httpObject, originalRequest);
+                                        return serverToProxyResponseFilter.serverToProxyResponse(httpObject, originalRequest,port);
                                     }
 
                                     @Override
                                     public HttpObject proxyToClientResponse(HttpObject httpObject) {
-                                        return proxyToClientResponseFilter.proxyToClientResponse(httpObject, originalRequest);
+                                        return proxyToClientResponseFilter.proxyToClientResponse(httpObject, originalRequest,port);
                                     }
 
                                     @Override
