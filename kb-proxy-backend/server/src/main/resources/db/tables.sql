@@ -1,4 +1,4 @@
-CREATE TABLE `env_info` (
+CREATE TABLE `kb-proxy`.`env_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL COMMENT '环境名称',
   `user_id` int(11) NOT NULL COMMENT '用户id',
@@ -9,7 +9,7 @@ CREATE TABLE `env_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `mock_proxy` (
+CREATE TABLE `kb-proxy`.`mock_proxy` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL COMMENT 'mock名称',
   `description` varchar(1024) DEFAULT NULL COMMENT 'mock描述',
@@ -27,7 +27,7 @@ CREATE TABLE `mock_proxy` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `mock_proxy_history` (
+CREATE TABLE `kb-proxy`.`mock_proxy_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mock_id` int(11) NOT NULL COMMENT 'mock_proxy表id',
   `url` longtext NOT NULL COMMENT '请求url',
@@ -39,7 +39,7 @@ CREATE TABLE `mock_proxy_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `proxy_request_detail` (
+CREATE TABLE `kb-proxy`.`proxy_request_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` varchar(256) DEFAULT NULL COMMENT '请求方式',
   `protocol` varchar(256) DEFAULT NULL COMMENT '请求协议 ',
@@ -58,7 +58,7 @@ CREATE TABLE `proxy_request_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `proxy_response_detail` (
+CREATE TABLE `kb-proxy`.`proxy_response_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `request_detail_id` int(11) NOT NULL COMMENT 'proxy_request_detail表id',
   `code` varchar(45) DEFAULT NULL COMMENT '状态码',
@@ -70,7 +70,7 @@ CREATE TABLE `proxy_response_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `repeater_request_detail` (
+CREATE TABLE `kb-proxy`.`repeater_request_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL COMMENT '重发请求名称',
   `description` varchar(1024) DEFAULT NULL COMMENT '描述',
@@ -87,7 +87,7 @@ CREATE TABLE `repeater_request_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `repeater_request_folder` (
+CREATE TABLE `kb-proxy`.`repeater_request_folder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL COMMENT '文件夹名称',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -96,7 +96,7 @@ CREATE TABLE `repeater_request_folder` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `repeater_request_history` (
+CREATE TABLE `kb-proxy`.`repeater_request_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(1024) NOT NULL COMMENT '请求url',
   `method` varchar(45) NOT NULL COMMENT '请求方式',
@@ -112,7 +112,7 @@ CREATE TABLE `repeater_request_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `user_info` (
+CREATE TABLE `kb-proxy`.`user_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login_name` varchar(256) NOT NULL COMMENT '登录账号',
   `login_pwd` varchar(256) NOT NULL COMMENT '登录密码',
