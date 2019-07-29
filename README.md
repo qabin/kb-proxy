@@ -2,6 +2,15 @@
 
 ### 平台介绍
 kb-proxy 是一个可本地部署的、类Anyproxy代理、类Postman接口管理、支持在线Mock、Host环境管理的在线工具平台
+### 使用教程
+ - [开源工具kb-proxy:支持代理、接口测试、在线mock功能【一】](https://blog.csdn.net/a787373009/article/details/97527295)
+ - [开源工具kb-proxy:本地安装与启动教程【二】](https://blog.csdn.net/a787373009/article/details/97528408)
+ - [开源工具kb-proxy:注册与登录【三】](https://blog.csdn.net/a787373009/article/details/97634503)
+ - [开源工具kb-proxy:证书安装配置【四】](https://blog.csdn.net/a787373009/article/details/97623565)
+ - [开源工具kb-proxy:代理功能使用教程【五】](https://blog.csdn.net/a787373009/article/details/97639130)
+ - [开源工具kb-proxy:接口测试使用教程【六】](https://blog.csdn.net/a787373009/article/details/97640670)
+ - [开源工具kb-proxy:Mock功能使用教程【七】](https://blog.csdn.net/a787373009/article/details/97642078)
+ - [开源工具kb-proxy:Host功能使用教程【八】](https://blog.csdn.net/a787373009/article/details/97643244)
 
 ### 功能介绍
 - 代理工具：支持HTTP\HTTPS请求抓包
