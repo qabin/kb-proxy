@@ -55,6 +55,7 @@ export default [
   {
     path: '/login',
     component: () => import('../pages/user/login')
+
   },
   {
     path: '/register',
