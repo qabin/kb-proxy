@@ -35,6 +35,7 @@
       },
       download_ca() {
         window.open(this.ca_url, '_blank')
+
       }
     },
   }
