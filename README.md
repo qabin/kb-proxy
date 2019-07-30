@@ -1,7 +1,16 @@
 # Kb-Proxy 代理管理、接口测试、Mock服务
 
 ### 平台介绍
-kb-proxy 是一个可本地部署的、类Anyproxy代理、类Postman接口管理、支持在线Mock、Host环境管理的在线工具平台
+    >代理工具繁杂，究竟应该选择哪个？
+	>接口测试录入繁复，到底怎么才能简化？
+	>mock服务看似美妙，但搭建和使用从来就不那么美好？
+	
+今天，给大家推荐一个工具：**kb-proxy**
+- **一次搭建，全员代理**，不再装装装。 
+- **一键转接口测试**，不再录录录 
+- **一键转Mock服务**，不再烦烦烦
+   开源项目地址： [kb-proxy](https://github.com/qabin/kb-proxy)  ，如果能帮到你，请帮忙点个星。谢谢~
+   **kb-proxy** 是一个可本地部署的、提供代理功能、接口测试管理、支持在线Mock、Host环境管理的在线工具平台。
 ### 使用教程
  - [开源工具kb-proxy:支持代理、接口测试、在线mock功能【一】](https://blog.csdn.net/a787373009/article/details/97527295)
  - [开源工具kb-proxy:本地安装与启动教程【二】](https://blog.csdn.net/a787373009/article/details/97528408)

@@ -9,7 +9,7 @@
 
       <div class="absolute-right row">
         <env-selector ref="EnvSelector"
-        @click.native="env_selector_click"></env-selector>
+                      @click.native="env_selector_click"></env-selector>
 
         <q-btn class="full-height shadow-0"
                @click.native=user_info_btn_click
@@ -20,6 +20,23 @@
             <user-info ref="UserInfo"/>
           </q-popover>
         </q-btn>
+        <q-btn class="full-height shadow-0"
+               icon="import_contacts"
+               size="lg"
+               @click.native="open_url('https://blog.csdn.net/a787373009/article/category/9170556')"
+        >
+          <q-tooltip :offset="[5,5]">使用教程</q-tooltip>
+        </q-btn>
+
+        <q-btn class="full-height shadow-0"
+               icon="star_border"
+               size="lg"
+               @click.native="open_url('https://github.com/qabin/kb-proxy')"
+        >
+          <q-tooltip :offset="[5,5]">源码地址</q-tooltip>
+        </q-btn>
+
+
         <q-btn class="full-height shadow-0"
                icon="exit_to_app"
                size="lg"
@@ -69,6 +86,9 @@
       },
       env_selector_click(){
         this.$refs.EnvSelector.refresh_env_list()
+      },
+      open_url(url){
+        window.open(url,'_blank')
       }
     },
     mounted() {

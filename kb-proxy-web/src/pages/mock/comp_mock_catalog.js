@@ -73,18 +73,18 @@ export default {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               wordWrap: 'break-word',
-              width:'40%'
+              width:'20%'
             }
-          }, detail.url),
+          }, detail.name),
           h('div', {
             staticClass: 'q-mr-sm text-faded text-weight-bold text-left',
             style: {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               wordWrap: 'break-word',
-              width:'20%'
+              width:'40%'
             }
-          }, detail.name),
+          }, detail.url),
           h('div', {
             staticClass: 'q-mr-sm text-faded text-weight-bold text-left col-grow',
             style: {

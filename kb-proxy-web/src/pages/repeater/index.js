@@ -36,8 +36,8 @@ export default {
         staticClass: 'row no-wrap',
         style: {
           width: '100%',
-          maxHeight: '100%',
-          minHeight:'833px'
+          maxHeight:'100%',
+          minHeight:'95vh'
         },
       }, [
         h(LeftDetail, {

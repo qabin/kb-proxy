@@ -39,8 +39,7 @@ export const getUserInfo = ({state}) => {
           }
         })
         .catch((e) => {
-          // notify_err('获取用户信息异常');
-          // reject(e)
+          router.push({path: '/login'})
         })
   })
 };
@@ -62,8 +61,7 @@ export const refreshUserInfo = ({state}) => {
         }
       })
       .catch((e) => {
-        // notify_err('获取用户信息异常');
-        // reject(e)
+        router.push({path: '/login'})
       })
   })
 };

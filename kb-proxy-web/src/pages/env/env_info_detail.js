@@ -47,7 +47,11 @@ export default {
   validations: {},
   methods: {
     render_left_detail(h) {
-      return h('div', {}, [
+      return h('div', {
+        style: {
+          height: '94%'
+        }
+      }, [
         h('div', {
           staticClass: 'row'
         }, [
@@ -79,7 +83,7 @@ export default {
       return h('div', {
         staticClass: 'col-grow',
         style: {
-          height: '770px'
+          height: '100%'
         }
       }, [this.render_env_catalog(h)])
     },
@@ -160,7 +164,7 @@ export default {
           value: this.selected_env.hosts || null,
           width: '100%',
           toolbar: true,
-          height: '644px'
+          height: '75vh'
         },
         on: {
           input: (v) => this.selected_env.hosts = v
@@ -186,9 +190,6 @@ export default {
           staticClass: 'col-grow'
         }, [h('div', {
           staticClass: 'font-16 text-weight-bold ellipsis',
-          style: {
-            maxWidth: '600px'
-          }
         }, [
           this.edit ? h('q-input', {
             staticClass: 'pp-input-focus font-16',
@@ -343,7 +344,7 @@ export default {
           if (d.status === 1) {
             notify_ok("已启用！")
             vm.$store.state.env.selected_env.status = 1
-            vm.$store.state.env.active_env=this.selected_env
+            vm.$store.state.env.active_env = this.selected_env
             vm.new = false
             vm.refresh_env_list()
           }
@@ -375,7 +376,7 @@ export default {
       }
     }, [
       h('div', {
-        staticClass: 'row',
+        staticClass: 'row no-wrap',
         style: {
           width: '100%'
         }

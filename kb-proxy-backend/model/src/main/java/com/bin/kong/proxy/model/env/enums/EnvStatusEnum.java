@@ -1,7 +1,5 @@
 package com.bin.kong.proxy.model.env.enums;
 
-import com.bin.kong.proxy.model.proxy.enums.UserInfoStatusEnum;
-
 public enum EnvStatusEnum {
     //状态：-1.停止 1. 开始
     STOP(-1, "停止"),  START(1, "开启");

@@ -10,7 +10,7 @@ export default {
     render_json_response(h) {
       return h(VueEditor, {
         props: {
-          height: '450px',
+          height: '56vh',
           value: this.response,
           disable: true
         }

@@ -42,7 +42,7 @@ export default {
         staticClass: 'q-ml-md text-left row',
       }, [
         h('div', {
-          staticClass: 'font-14 text-weight-bold',
+          staticClass: 'font-16 text-weight-bold',
           'class': {
             'text-deep-orange': !this.active,
             'text-white': this.active
