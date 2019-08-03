@@ -35,10 +35,3 @@
 - 安装Git
 - 安装Mysql数据库5.7版本
 
-- 创建数据库表
-![创建数据库表](https://img-blog.csdnimg.cn/20190727155220979.gif)
-- 本地证书配置
-![本地证书配置](https://img-blog.csdnimg.cn/20190727155256676.gif)
-- 启动项目
-![启动项目](https://img-blog.csdnimg.cn/20190727155351506.gif)
-
