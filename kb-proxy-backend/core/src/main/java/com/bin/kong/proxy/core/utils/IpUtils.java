@@ -39,4 +39,17 @@ public class IpUtils {
         }
         return null;
     }
+
+    /**
+     * 获取本机Ip
+     * @return
+     */
+    public static String getLocalIp() {
+        if (null != getLocalHostLANAddress()) {
+            return getLocalHostLANAddress().getHostAddress();
+
+        }
+        return null;
+
+    }
 }

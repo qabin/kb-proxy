@@ -2,6 +2,7 @@ package com.bin.kong.proxy.server.littleproxy;
 
 import com.alibaba.fastjson.JSON;
 import com.bin.kong.proxy.core.cache.impl.LocalCacheUtils;
+import com.bin.kong.proxy.core.constants.ProxyConstants;
 import com.bin.kong.proxy.core.utils.IpUtils;
 import com.bin.kong.proxy.dao.mapper.mock.MockProxyHistoryMapper;
 import com.bin.kong.proxy.dao.mapper.proxy.RequestDetailMapper;
@@ -44,6 +45,18 @@ public class ClientToProxyRequestFilter {
 
     public HttpResponse clientToProxyRequest(HttpObject httpObject, HttpRequest originalRequest, Integer port) {
         try {
+
+            /**
+             * 暂时这么处理，这会影响到Https请求的显示 ，不过目前看来不影响 https请求的发送
+             */
+            if (originalRequest.getUri().startsWith("/") && httpObject instanceof HttpRequest&& ((HttpRequest) httpObject).headers().contains(ProxyConstants.KB_PROXY_FROM_NGINX)) {
+                if (httpObject instanceof DefaultHttpRequest) {
+                    ((DefaultHttpRequest) httpObject).setUri("http://" + originalRequest.headers().get(HttpHeaders.HOST) + originalRequest.getUri());
+                }
+                originalRequest.setUri(originalRequest.headers().get(HttpHeaders.HOST) + originalRequest.getUri());
+            }
+
+
             // TODO: implement your filtering here
             HttpEntity myRequest = requestMap.get(originalRequest) == null ? HttpEntity.builder().build() : requestMap.get(originalRequest);
 
@@ -97,7 +110,7 @@ public class ClientToProxyRequestFilter {
                                     .url(url)
                                     .build());
 
-                        }else{
+                        } else {
                             //添加缓存
                             LocalCacheUtils.putIfAbsent(originalRequest, ProxyRequestCacheDO.builder()
                                     .request_id(requestDetail.getId())

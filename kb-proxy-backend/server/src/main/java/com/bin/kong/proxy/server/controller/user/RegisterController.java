@@ -30,6 +30,14 @@ public class RegisterController {
     public GenericResponse ajax_register(@RequestBody RegisterRequest request) {
         GenericResponse response = new GenericResponse();
         try {
+            UserInfo oldUserInfo = userInfoMapper.selectByLoginName(request.getLogin_name());
+            if (null != oldUserInfo) {
+                response.setStatus(ResponseConstants.FAIL_CODE);
+                response.setMessage("账号已存在！");
+                return response;
+
+            }
+
             if (StringUtils.isNotEmpty(request.getLogin_name()) && StringUtils.isNotEmpty(request.getLogin_pwd())) {
                 UserInfo userInfo = UserInfo.builder()
                         .create_time(new Date())
