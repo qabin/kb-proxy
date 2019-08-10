@@ -33,7 +33,7 @@ export default {
       }, [
         h(LazyInput, {
           staticClass: 'pp-search-input q-ma-sm',
-          props: {value: this.kw, placeholder: '按名称查找', width: 245},
+          props: {value: this.kw, placeholder: '按名称查找',width:'100%'},
           on: {
             input: v => {
               this.kw = v;

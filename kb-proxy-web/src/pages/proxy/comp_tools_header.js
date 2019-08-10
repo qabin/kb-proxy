@@ -128,17 +128,17 @@ export default {
         ]),
         h('div', {
           staticClass: 'q-ml-md q-mr-xl cursor-pointer div-blue-hover',
+          on:{
+            click:()=>{
+              this.$refs.QRCodeRender.bindQRCode()
+            }
+          }
         }, [
           h('div', {
             staticClass: 'items-center row',
             style: {
               height: '36px'
             },
-            on:{
-              click:()=>{
-                this.$refs.QRCodeRender.bindQRCode()
-              }
-            }
           }, [h('q-icon', {
             staticClass: '',
             props: {
