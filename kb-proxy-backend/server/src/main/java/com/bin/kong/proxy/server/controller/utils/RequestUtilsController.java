@@ -59,7 +59,7 @@ public class RequestUtilsController extends BaseController {
                 String domain = getDomainByUrl(request.getUrl());
                 String ip = hostMap.get(domain);
                 if (StringUtils.isNotEmpty(domain) && StringUtils.isNotEmpty(ip)) {
-                    url =url.replace(domain, ip);
+                    url = url.replace(domain, ip);
                     headerMap.put(HttpHeaders.HOST, domain);
                 }
             }
@@ -110,16 +110,13 @@ public class RequestUtilsController extends BaseController {
         } else if (url.startsWith("https://")) {
             url = url.substring(8);
         }
-        int maoHaoIndex = 0;
-        int xieGangIndex = 0;
         if (url.indexOf(":") != -1) {
-            maoHaoIndex = url.indexOf(":");
+            url = url.substring(0, url.indexOf(":"));
         }
         if (url.indexOf("/") != -1) {
-            xieGangIndex = url.indexOf("/");
+            url = url.substring(0, url.indexOf("/"));
         }
-        domain = url.substring(0, (maoHaoIndex < xieGangIndex ? maoHaoIndex : xieGangIndex) > 0 ? (maoHaoIndex < xieGangIndex ? maoHaoIndex : xieGangIndex) : url.length());
-
+        domain = url;
         return domain;
     }
 

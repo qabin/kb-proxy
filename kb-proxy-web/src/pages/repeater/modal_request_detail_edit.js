@@ -65,7 +65,7 @@ export default {
       }
     },
     submit({done, close}) {
-      if (this.model.id) {
+      if (typeof this.model.id === 'number') {
         ajax_update_request_detail(this.model)
           .then(() => {
             close();
@@ -76,11 +76,20 @@ export default {
             this.$q.err('请求保存失败!');
           });
       } else {
-        ajax_add_request_detail(this.model)
-          .then(() => {
-            close();
-            this.$emit('submit');
-          })
+        ajax_add_request_detail({
+          url: this.model.url,
+          method: this.model.method,
+          headers: this.model.headers,
+          request_json: this.model.request_json,
+          request_form: this.model.request_form,
+          body_type: this.model.body_type,
+          folder_id: this.model.folder_id,
+          name: this.model.name,
+          description: this.model.description
+        }).then(() => {
+          close();
+          this.$emit('submit');
+        })
           .catch(() => {
             done();
             this.$q.err('请求保存失败!');

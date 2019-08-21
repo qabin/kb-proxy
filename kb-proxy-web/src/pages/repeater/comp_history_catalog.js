@@ -184,10 +184,28 @@ export default {
       })
     },
     open_in_new_tab(history) {
-      this.$emit('history_open_in_new_tab', history)
+      this.$emit('history_open_in_new_tab', {
+        body_type:history.body_type,
+        headers:history.headers,
+        method:history.method,
+        request_form:history.request_form,
+        request_json:history.request_json,
+        response_body:history.response_body,
+        response_headers:history.response_headers,
+        url:history.url,
+      })
     },
     open_in_first_tab(history) {
-      this.$emit('history_open_in_first_tab', history)
+      this.$emit('history_open_in_first_tab', {
+        body_type:history.body_type,
+        headers:history.headers,
+        method:history.method,
+        request_form:history.request_form,
+        request_json:history.request_json,
+        response_body:history.response_body,
+        response_headers:history.response_headers,
+        url:history.url,
+      })
     },
     show_request_detail_add_modal(v) {
       v.id = null

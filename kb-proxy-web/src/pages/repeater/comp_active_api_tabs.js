@@ -210,7 +210,7 @@ export default {
         let newTab = {
           url: v.url,
           method: v.method,
-          id: id,
+          id: v.id || id,
           headers: typeof v.headers === 'string' ? header_map_to_arr(v.headers) : v.headers,
           request_json: typeof v.request_json === 'string' ? string_to_json(v.request_json) : v.request_json,
           request_form: typeof v.request_form === 'string' ? header_map_to_arr(v.request_form) : v.request_form,
@@ -219,8 +219,8 @@ export default {
           response_headers: typeof v.response_headers === 'string' ? string_to_json(v.response_headers) : v.response_headers,
           name: v.name,
           description: v.description,
-          folder_id:v.folder_id,
-          folder_name:v.folder_name,
+          folder_id: v.folder_id,
+          folder_name: v.folder_name,
         }
         this.selectTab = {
           ...newTab

@@ -8,6 +8,7 @@ import RequestDetailEditModal from './modal_request_detail_edit'
 export default {
   name: 'compRightDetail',
   data: () => ({
+    id:null,
     headers: [],
     request_json: null,
     request_form: [],
@@ -122,6 +123,7 @@ export default {
       this.$emit('url_input', v)
     },
     active_tab_select(v) {
+      this.id = v.id
       this.url = v.url
       this.method = v.method
       this.headers = v.headers
@@ -141,6 +143,7 @@ export default {
     },
     show_request_detail_add_modal() {
       let model = {
+        id: this.id,
         url: this.url,
         method: this.method,
         headers: JSON.stringify(header_arr_to_map(this.headers)),

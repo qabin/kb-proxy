@@ -30,7 +30,8 @@ public class HostUtils {
                         try {
                             String ip = hostAndIpStr.substring(0, hostAndIpStr.indexOf(" ")).trim();
                             String domain = hostAndIpStr.substring(hostAndIpStr.indexOf(" ")).trim();
-                            resultMap.put(domain, ip);
+                            if (!ip.startsWith("#"))
+                                resultMap.put(domain, ip);
                         } catch (Exception e) {
                         }
                     }
