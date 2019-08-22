@@ -1,6 +1,8 @@
 package com.bin.kong.proxy.server.littleproxy;
 
+import com.bin.kong.proxy.core.constants.ProxyConstants;
 import com.bin.kong.proxy.core.utils.IpUtils;
+import com.bin.kong.proxy.core.utils.OSUtils;
 import com.bin.kong.proxy.dao.mapper.user.UserInfoMapper;
 import com.bin.kong.proxy.model.user.entity.UserInfo;
 import io.netty.channel.ChannelHandlerContext;
@@ -67,7 +69,8 @@ public class LittleProxyServer {
     public void startProxy(Integer port) {
         try {
             if (proxyServerCache.get(port) == null && null == proxyServerCache.get(port)) {
-                Authority authority = new Authority(new File("/proxy/mitm")
+
+                Authority authority = new Authority(new File(OSUtils.isWindows() ? ProxyConstants.PEM_PATH_FOR_WIN : ProxyConstants.PEM_PATH_FOR_LINUX)
                         , "kb-proxy-mitm"
                         , "Be Your Own Lantern".toCharArray()
                         , "Kb-Proxy-mitm"
@@ -92,12 +95,12 @@ public class LittleProxyServer {
 
                                     @Override
                                     public HttpObject serverToProxyResponse(HttpObject httpObject) {
-                                        return serverToProxyResponseFilter.serverToProxyResponse(httpObject, originalRequest,port);
+                                        return serverToProxyResponseFilter.serverToProxyResponse(httpObject, originalRequest, port);
                                     }
 
                                     @Override
                                     public HttpObject proxyToClientResponse(HttpObject httpObject) {
-                                        return proxyToClientResponseFilter.proxyToClientResponse(httpObject, originalRequest,port);
+                                        return proxyToClientResponseFilter.proxyToClientResponse(httpObject, originalRequest, port);
                                     }
 
                                     @Override
