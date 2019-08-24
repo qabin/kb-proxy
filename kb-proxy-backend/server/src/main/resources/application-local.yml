@@ -40,3 +40,6 @@ spring:
 
 proxy:
   excludeDomain: localhost
+
+encryption:
+  domain_list:

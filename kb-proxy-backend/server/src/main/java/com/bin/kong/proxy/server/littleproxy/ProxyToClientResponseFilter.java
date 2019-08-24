@@ -8,6 +8,7 @@ import com.bin.kong.proxy.model.proxy.entity.ProxyRequestCacheDO;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.proxy.entity.ResponseDetail;
 import com.bin.kong.proxy.model.repeater.enums.MockStatusEnum;
+import com.bin.kong.proxy.server.encryption.IResponseDecrypt;
 import com.bin.kong.proxy.server.mock.MockMatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
@@ -29,10 +30,12 @@ public class ProxyToClientResponseFilter {
     private RequestDetailMapper requestDetailMapper;
     @Resource
     private MockMatcher mockMatcher;
+    @Resource
+    private IResponseDecrypt responseDecrypt;
 
     private static Map<Object, HttpEntity> responseMap = new HashMap<>();
 
-    public HttpObject proxyToClientResponse(HttpObject httpObject, HttpRequest originalRequest,Integer port) {
+    public HttpObject proxyToClientResponse(HttpObject httpObject, HttpRequest originalRequest, Integer port) {
         try {
             if (LocalCacheUtils.get(originalRequest) == null || ((ProxyRequestCacheDO) LocalCacheUtils.get(originalRequest)).getMock() != MockStatusEnum.IS_MOCK.getCode()) {
                 return httpObject;
@@ -63,7 +66,7 @@ public class ProxyToClientResponseFilter {
                     byte[] array = new byte[buf.readableBytes()];
                     buf.readBytes(array);
                     buf.resetReaderIndex();
-                    responseDetail.setBody(new String(array, CharsetUtil.UTF_8));
+                    responseDetail.setBody(responseDecrypt.decrypt(originalRequest.headers().get(org.springframework.http.HttpHeaders.HOST),new String(array, CharsetUtil.UTF_8)));
                 }
 
                 if (LocalCacheUtils.get(originalRequest) != null) {

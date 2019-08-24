@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import store from '../store'
 import {Loading, QSpinnerBars} from 'quasar-framework/dist/quasar.mat.esm'
 
 const axiosInstance = axios.create({
@@ -28,15 +28,15 @@ axiosInstance.interceptors.response.use(
     Loading.hide();
     const res = response.data;
     // 1001:未登录;1002:toke异常
-    // if (res.status === 1001 || res.status === 1002) {
-    //   // vm.$q.warning(res.message);
-    //   // store.dispatch('FedLogOut').then(() => {
-    //   //   location.reload();
-    //   // });
-    //   // return Promise.reject('error');
-    // } else {
-    //   return response.data;
-    // }
+    if (res.status === 1001 || res.status === 1002) {
+      vm.$q.warning(res.message);
+      store.dispatch('FedLogOut').then(() => {
+        location.reload();
+      });
+      return Promise.reject('error');
+    } else {
+      return response.data;
+    }
     return response.data;
   },
   error => {

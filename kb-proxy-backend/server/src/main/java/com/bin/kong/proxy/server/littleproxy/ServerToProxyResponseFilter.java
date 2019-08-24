@@ -7,6 +7,7 @@ import com.bin.kong.proxy.dao.mapper.proxy.ResponseDetailMapper;
 import com.bin.kong.proxy.model.proxy.entity.ProxyRequestCacheDO;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.proxy.entity.ResponseDetail;
+import com.bin.kong.proxy.server.encryption.IResponseDecrypt;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
@@ -27,10 +28,12 @@ public class ServerToProxyResponseFilter {
     private ResponseDetailMapper responseDetailMapper;
     @Resource
     private RequestDetailMapper requestDetailMapper;
+    @Resource
+    private IResponseDecrypt responseDecrypt;
 
     private static Map<Object, HttpEntity> responseMap = new HashMap<>();
 
-    public HttpObject serverToProxyResponse(HttpObject httpObject, HttpRequest originalRequest,Integer port) {
+    public HttpObject serverToProxyResponse(HttpObject httpObject, HttpRequest originalRequest, Integer port) {
         try {
 
             if (LocalCacheUtils.get(originalRequest) == null) {
@@ -67,11 +70,11 @@ public class ServerToProxyResponseFilter {
                             ByteArrayInputStream bais = new ByteArrayInputStream(myResponse.getContent());
                             GZIPInputStream gzis = new GZIPInputStream(bais);
                             byte[] decompressedData = IOUtils.toByteArray(gzis);
-                            responseDetail.setBody(new String(decompressedData, CharEncoding.UTF_8));
+                            responseDetail.setBody(responseDecrypt.decrypt(originalRequest.headers().get(org.springframework.http.HttpHeaders.HOST),new String(decompressedData, CharEncoding.UTF_8)));
                         }
                     } else {
                         if (myResponse.getContent() != null) {
-                            responseDetail.setBody(new String(myResponse.getContent(), CharEncoding.UTF_8));
+                            responseDetail.setBody(responseDecrypt.decrypt(originalRequest.headers().get(org.springframework.http.HttpHeaders.HOST),new String(myResponse.getContent(), CharEncoding.UTF_8)));
                         }
                     }
                 }

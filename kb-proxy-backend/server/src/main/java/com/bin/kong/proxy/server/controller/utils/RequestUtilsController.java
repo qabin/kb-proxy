@@ -6,6 +6,8 @@ import com.bin.kong.proxy.core.utils.HttpUtils;
 import com.bin.kong.proxy.dao.mapper.repeater.RepeaterRequestHistoryMapper;
 import com.bin.kong.proxy.model.repeater.entity.RepeaterRequestHistory;
 import com.bin.kong.proxy.server.controller.BaseController;
+import com.bin.kong.proxy.server.encryption.IRequestEncrypt;
+import com.bin.kong.proxy.server.encryption.IResponseDecrypt;
 import com.bin.kong.proxy.server.host.HostCache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,10 @@ public class RequestUtilsController extends BaseController {
     private RepeaterRequestHistoryMapper repeaterRequestHistoryMapper;
     @Resource
     private HostCache hostCache;
+    @Resource
+    private IResponseDecrypt responseDecrypt;
+    @Resource
+    private IRequestEncrypt requestEncrypt;
 
     /**
      * 使用服务器处理前端请求，解决跨域问题
@@ -73,12 +79,14 @@ public class RequestUtilsController extends BaseController {
                     }
                 }
 
+                String request_json = requestEncrypt.encrypt(getDomainByUrl(request.getUrl()), request.getRequest_json());
+
                 if (request.getMethod().equals(HttpMethod.POST.name())) {
-                    result = HttpUtils.doPost(url, request.getRequest_form(), headerMap, request.getRequest_json());
+                    result = HttpUtils.doPost(url, request.getRequest_form(), headerMap, request_json);
                 } else if (request.getMethod().equals(HttpMethod.PUT.name())) {
-                    result = HttpUtils.doPut(url, request.getRequest_form(), headerMap, request.getRequest_json());
+                    result = HttpUtils.doPut(url, request.getRequest_form(), headerMap, request_json);
                 } else if (request.getMethod().equals(HttpMethod.PATCH.name())) {
-                    result = HttpUtils.doPatch(url, request.getRequest_form(), headerMap, request.getRequest_json());
+                    result = HttpUtils.doPatch(url, request.getRequest_form(), headerMap, request_json);
                 }
             } else if (request.getMethod().equals(HttpMethod.DELETE.name())) {
                 result = HttpUtils.doDelete(url, headerMap);
@@ -87,7 +95,7 @@ public class RequestUtilsController extends BaseController {
             repeaterRequestHistoryMapper.updateByPrimaryKeySelective(RepeaterRequestHistory.builder()
                     .id(repeaterRequestHistory.getId())
                     .update_time(new Date())
-                    .response_body(((Map<String, String>) result).get("response"))
+                    .response_body(responseDecrypt.decrypt(getDomainByUrl(request.getUrl()), ((Map<String, String>) result).get("response")))
                     .response_headers(JSON.toJSONString(((Map<String, String>) result).get("headers")))
                     .build());
             return result;

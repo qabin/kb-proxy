@@ -11,6 +11,7 @@ import com.bin.kong.proxy.model.mock.entity.MockProxyHistory;
 import com.bin.kong.proxy.model.proxy.entity.ProxyRequestCacheDO;
 import com.bin.kong.proxy.model.proxy.entity.RequestDetail;
 import com.bin.kong.proxy.model.repeater.enums.MockStatusEnum;
+import com.bin.kong.proxy.server.encryption.IRequestDecrypt;
 import com.bin.kong.proxy.server.mock.MockProxyCache;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,8 @@ public class ClientToProxyRequestFilter {
     private MockProxyCache mockProxyCache;
     @Value("${proxy.excludeDomain:#{null}}")
     private String excludeDomain;
+    @Resource
+    private IRequestDecrypt requestDecrypt;
 
 
     private static Map<Object, HttpEntity> requestMap = new HashMap<>();
@@ -49,7 +52,7 @@ public class ClientToProxyRequestFilter {
             /**
              * 暂时这么处理，这会影响到Https请求的显示 ，不过目前看来不影响 https请求的发送
              */
-            if (originalRequest.getUri().startsWith("/") && httpObject instanceof HttpRequest&& ((HttpRequest) httpObject).headers().contains(ProxyConstants.KB_PROXY_FROM_NGINX)) {
+            if (originalRequest.getUri().startsWith("/") && httpObject instanceof HttpRequest && ((HttpRequest) httpObject).headers().contains(ProxyConstants.KB_PROXY_FROM_NGINX)) {
                 if (httpObject instanceof DefaultHttpRequest) {
                     ((DefaultHttpRequest) httpObject).setUri("http://" + originalRequest.headers().get(HttpHeaders.HOST) + originalRequest.getUri());
                 }
@@ -136,11 +139,11 @@ public class ClientToProxyRequestFilter {
                             ByteArrayInputStream bais = new ByteArrayInputStream(myRequest.getContent());
                             GZIPInputStream gzis = new GZIPInputStream(bais);
                             byte[] decompressedData = IOUtils.toByteArray(gzis);
-                            requestDetail.setBody(new String(decompressedData, CharEncoding.UTF_8));
+                            requestDetail.setBody(requestDecrypt.decrypt(originalRequest.headers().get(HttpHeaders.HOST),new String(decompressedData, CharEncoding.UTF_8)));
                         }
                     } else {
                         if (myRequest.getContent() != null) {
-                            requestDetail.setBody(new String(myRequest.getContent(), CharEncoding.UTF_8));
+                            requestDetail.setBody(requestDecrypt.decrypt(originalRequest.headers().get(HttpHeaders.HOST),new String(myRequest.getContent(), CharEncoding.UTF_8)));
                         }
                     }
                 }
