@@ -12,7 +12,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "qrcodejs2": "0.0.2",
     "quasar-extras": "^2.0.9",
     "quasar-framework": "^0.17.0",
